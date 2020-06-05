@@ -50,6 +50,15 @@ d3.json(
       .attr("id", "y-axis")
       .attr("transform", "translate(60,50)");
 
+    // tooltip
+
+    var tooltip = d3
+      .select(".graphContainer")
+      .append("div")
+      .attr("class", "tooltip")
+      .attr("id", "tooltip")
+      .style("opacity", 0);
+
     // graph
 
     d3.select("svg")
@@ -69,7 +78,39 @@ d3.json(
         }
         return "red";
       })
-      .attr("transform", "translate(60,50)");
+      .attr("transform", "translate(60,50)")
+      .on("mouseover", function (d) {
+        tooltip.transition().duration(200).style("opacity", 0.9);
+        tooltip
+          .attr("data-year", d.Year)
+          .html(
+            d.Name +
+              ": " +
+              d.Nationality +
+              "<br/>" +
+              "Year: " +
+              d.Year +
+              ", Time: " +
+              d.Time +
+              (d.Doping
+                ? "<br/><br/>" +
+                  d.Doping +
+                  "<br />" +
+                  "Source: " +
+                  "<a href=" +
+                  d.URL +
+                  " target=`_blank`>" +
+                  d.URL +
+                  "</a>"
+                : "")
+          )
+
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY - 28 + "px");
+      })
+      .on("mouseout", function (d) {
+        tooltip.style("opacity", 0);
+      });
 
     // legend
 
