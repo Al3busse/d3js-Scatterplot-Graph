@@ -1,4 +1,4 @@
-# Visualize Data with a Scatterplot Graph (under development)
+# Visualize Data with a Scatterplot Graph
 
 A simple project created with D3.js for the [FreeCodeCamp](https://www.freecodecamp.org/) Data Visualization Certificate
 
