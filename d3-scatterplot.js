@@ -5,7 +5,7 @@ var svgContainer = d3
   .select(".graphContainer")
   .append("svg")
   .attr("width", width + 100)
-  .attr("height", height + 150);
+  .attr("height", height + 100);
 
 d3.json(
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json",
@@ -27,7 +27,7 @@ d3.json(
       .tickFormat(d3.format("d"))
       .tickValues(xScale.ticks(tickYears()).concat(xScale.domain()));
 
-    xAxisGroup = svgContainer
+    var xAxisGroup = svgContainer
       .append("g")
       .call(xAxis)
       .attr("id", "x-axis")
@@ -49,6 +49,16 @@ d3.json(
       .call(yAxis)
       .attr("id", "y-axis")
       .attr("transform", "translate(60,50)");
+
+    // ylabel
+    svgContainer
+      .append("text")
+      .attr("class", "y label")
+      .attr("y", 18)
+      .attr("x", -350)
+      .style("font-size", 18)
+      .attr("transform", "rotate(-90)")
+      .text("Time in Minutes");
 
     // tooltip
 
@@ -114,32 +124,34 @@ d3.json(
 
     // legend
 
-    var legendContainer = svgContainer.attr("id", "legend");
+    var legendContainer = svgContainer.append("g").attr("id", "legend");
 
     legendContainer
       .append("circle")
       .attr("cx", width - 131)
       .attr("cy", 128)
       .attr("r", 6)
-      .style("fill", "green");
+      .style("fill", "green")
+      .style("stroke", "#000");
     legendContainer
       .append("circle")
       .attr("cx", width - 131)
       .attr("cy", 158)
       .attr("r", 6)
-      .style("fill", "red");
+      .style("fill", "red")
+      .style("stroke", "#000");
     legendContainer
       .append("text")
       .attr("x", width - 120)
       .attr("y", 130)
-      .text("Riders with doping allegations")
+      .text("No doping allegations")
       .style("font-size", "15px")
       .attr("alignment-baseline", "middle");
     legendContainer
       .append("text")
       .attr("x", width - 120)
       .attr("y", 160)
-      .text("No doping allegations")
+      .text("Riders with doping allegations")
       .style("font-size", "15px")
       .attr("alignment-baseline", "middle");
   }
