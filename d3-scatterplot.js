@@ -13,17 +13,14 @@ d3.json(
     if (err) throw error;
     //x axis
     var year = data.map((d) => d.Year);
-    console.log(year);
 
     var xScale = d3
       .scaleLinear()
-      .domain([d3.min(year) - 1, d3.max(year) + 1])
+      .domain([d3.min(year), d3.max(year) + 1])
 
       .range([0, width]);
 
     var tickYears = () => d3.max(year) - d3.min(year);
-
-    console.log(tickYears());
 
     var xAxis = d3
       .axisBottom(xScale)
@@ -39,8 +36,6 @@ d3.json(
     //y axis
 
     var time = data.map((d) => d3.timeParse("%M:%S")(d.Time));
-
-    console.log(time.length);
 
     var yScale = d3.scaleTime().domain(d3.extent(time)).range([0, height]);
 
@@ -65,7 +60,46 @@ d3.json(
       .attr("cx", (d) => xScale(d.Year))
       .attr("cy", (d) => yScale(d3.timeParse("%M:%S")(d.Time)))
       .attr("r", 5)
-      .style("fill", "#000")
-      .attr("transform", "translate(" + 60 + "," + 50 + ")");
+      .attr("class", "dot")
+      .attr("data-xvalue", (d) => d.Year)
+      .attr("data-yvalue", (d) => d3.timeParse("%M:%S")(d.Time).toISOString())
+      .style("fill", function (d) {
+        if (d.Doping == "") {
+          return "green";
+        }
+        return "red";
+      })
+      .attr("transform", "translate(60,50)");
+
+    // legend
+
+    var legendContainer = svgContainer.attr("id", "legend");
+
+    legendContainer
+      .append("circle")
+      .attr("cx", width - 131)
+      .attr("cy", 128)
+      .attr("r", 6)
+      .style("fill", "green");
+    legendContainer
+      .append("circle")
+      .attr("cx", width - 131)
+      .attr("cy", 158)
+      .attr("r", 6)
+      .style("fill", "red");
+    legendContainer
+      .append("text")
+      .attr("x", width - 120)
+      .attr("y", 130)
+      .text("Riders with doping allegations")
+      .style("font-size", "15px")
+      .attr("alignment-baseline", "middle");
+    legendContainer
+      .append("text")
+      .attr("x", width - 120)
+      .attr("y", 160)
+      .text("No doping allegations")
+      .style("font-size", "15px")
+      .attr("alignment-baseline", "middle");
   }
 );
